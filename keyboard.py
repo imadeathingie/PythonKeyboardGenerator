@@ -237,7 +237,7 @@ class Keyboard:
         return intersections
 
 
-    def base(self, key, keys):
+    def base(self, key, keys, base_thickness=3):
         neighs = self.neighbours(key, keys)
         diags = self.diagonals(key, keys)
         intersections = []
@@ -277,7 +277,7 @@ class Keyboard:
         
         str = []
         for i in intersections:
-            str.append(f"hull(){{translate([0,0,-8])linear_extrude(3)projection(){{\n  {i}\n  }}}}")
+            str.append(f"hull(){{translate([0,0,-5-{base_thickness}])linear_extrude({base_thickness})projection(){{\n  {i}\n  }}}}")
         return str
     def matrix(self, keys):
         str = []
@@ -299,7 +299,7 @@ class Keyboard:
                 str.append(i)
             for i in self.walls(key, keys):
                 str.append(i)
-            for i in self.base(key, keys):
+            for i in self.base(key, keys, base_thickness=3):
                 str.append(i)
         
         print("\n".join(str))

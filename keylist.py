@@ -56,57 +56,28 @@ class Keylist:
 
 
     def gen_matrix(self, data):
-        if data.get('name') is None:
-            data['name'] = "default"
-        self.name = data['name']
 
+        self.name = data.get('name', "default")
         self.ignored_keys = data.get('ignored_keys', [])
-        if data.get('width') is None:
-            data['width'] = 5
-        if data.get('height') is None:
-            data['height'] = 5
+        self.hole_size = data.get('hole_size', 14.5)
+        self.key_1u = data.get('key_1u', 19.05)
+        self.thickness = data.get('thickness', 5)
 
-        width = data['width']
-        height = data['height']
-        
-        if data.get('hole_size') is None:
-            data['hole_size'] = 14.5
-        self.hole_size = data['hole_size']
-
-        if data.get('key_1u') is None:
-            data['key_1u'] = 19.05
-        self.key_1u = data['key_1u']
-
-        if data.get('thickness') is None:
-            data['thickness'] = 5
-        self.thickness = data['thickness']
-
-        if data.get('x_algo') is None:
-            data['x_algo'] = f"x*{self.key_1u}"
-        if data.get('y_algo') is None:
-            data['y_algo'] = f"-y*{self.key_1u}"
-        if data.get('z_algo') is None:
-            data['z_algo'] = "10"
-        if data.get('x_rot_algo') is None:
-            data['x_rot_algo'] = "0"
-        if data.get('y_rot_algo') is None:
-            data['y_rot_algo'] = "0"
-        if data.get('z_rot_algo') is None:
-            data['z_rot_algo'] = "0"
-        
-        x_algo = data['x_algo'] # x*1905/100+(x*10)
-        y_algo = data['y_algo'] # -y*1905/100-(y*10)
-        z_algo = data['z_algo'] # abs(y-2)*4+abs(x-2)*3 + 10
-        x_rot_algo = data['x_rot_algo'] # (y-2)*-5
-        y_rot_algo = data['y_rot_algo'] # (x - 2)*(-9)
-        z_rot_algo = data['z_rot_algo'] # 0
+        width = data.get('width', 6)
+        height = data.get('height', 4)
+        x_algo = data.get('x_algo', f"x*{self.key_1u}") # x*1905/100+(x*10)
+        y_algo = data.get('y_algo', f"-y*{self.key_1u}") # -y*1905/100-(y*10)
+        z_algo = data.get('z_algo', "10") # abs(y-2)*4+abs(x-2)*3 + 10
+        x_rot_algo = data.get('x_rot_algo', "0") # (y-2)*-5
+        y_rot_algo = data.get('y_rot_algo', "0") # (x - 2)*(-9)
+        z_rot_algo = data.get('z_rot_algo', "0") # 0
 
         keys = [
             {
             "u_width": 1,
             "u_height": 1,
-            "row": y,
             "col": x,
+            "row": y,
             "pos": {
                 "x": parse_algo(x_algo, x, y, 0),
                 "y": parse_algo(y_algo, x, y, 0),
