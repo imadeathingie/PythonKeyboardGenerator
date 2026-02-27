@@ -104,29 +104,7 @@ class Keylist:
                     "thickness":self.thickness, 
                     "keylist":self.keylist
                 }, f, indent=4)
-
-
-# keylist = [
-#     {
-#     "u_width": 1,
-#     "u_height": 1,
-#     "row": y,
-#     "col": x,
-#     "pos": {
-#         "x": x*1905/100+(x*10),
-#         "y": -y*1905/100-(y*10),
-#         "z": abs(y-2)*4+abs(x-2)*3 + 10
-#     },
-#     "rotation": {
-#         "x": (y-2)*-5,
-#         "y": (x - 2)*(-9),
-#         "z": 0
-#     }
-# } for x in range(width) for y in range(height)
-# ]
-
-# keylist = [x for x in keylist if not (x['row'] == 0 and x['col'] == 0) and not (x['row'] == 0 and x['col'] == width-1) and not (x['row'] == height-1 and x['col'] == 0) and not (x['row'] == height-1 and x['col'] == width-1) and not (x['row'] ==2 and x['col'] == 2) and not (x['row'] == 0 and x['col'] == 2) and not (x['row'] == height-1 and x['col'] == 2) and not (x['row'] == 2 and x['col'] == 0) and not (x['row'] == 2 and x['col'] == width-1)]
-
+    
 arg = sys.argv[1] if len(sys.argv) > 1 else 0
 if len(defaults.data) > int(arg):
     Keylist(defaults.data[int(arg)])

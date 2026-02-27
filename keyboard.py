@@ -11,14 +11,9 @@ class Keyboard:
             self.key_1u = data["key_1u"]
             self.thickness = data["thickness"]
             self.keylist = data["keylist"]
-            # print("test")
-            # print(self.json.dumps(self.keylist, indent=3))
             str = self.matrix(self.keylist)
             with open(f"output/scad/{self.name}.scad", 'w') as fw:
                 fw.write(str)
-
-
-    # self.keylist = [x for x in self.keylist if not (x['row'] == 0 and x['col'] == 0) and not (x['row'] == 0 and x['col'] == width-1) and not (x['row'] == height-1 and x['col'] == 0) and not (x['row'] == height-1 and x['col'] == width-1) and not (x['row'] ==2 and x['col'] == 2) and not (x['row'] == 0 and x['col'] == 2) and not (x['row'] == height-1 and x['col'] == 2) and not (x['row'] == 2 and x['col'] == 0) and not (x['row'] == 2 and x['col'] == width-1)]
 
     def tl(self, k):
         u = k['u_width']
@@ -73,8 +68,7 @@ class Keyboard:
         if z is not None:
             pz = z
         return "translate([%s,%s,%s]) {\n  rotate([%s,%s,%s]) {\n%s  }\n}\n" % (px, py, pz, rx, ry, rz, str)
-
-
+    
     def neighbours(self, key, keys):
         neighbours = {}
         for k in keys:
@@ -146,7 +140,6 @@ class Keyboard:
                 str_b =self.translate(neighs['b'], self.hull(self.tl(neighs['b'])[3:]))
                 walls.append("hull(){  "+str+"\n"+str_b+"\n  linear_extrude(0.1)projection(){ hull(){"+str+"\n"+str_b+"}\n  }\n }\n")
         
-
         if 'tr' not in diags:
             if 't' in neighs and 'r' in neighs:
                 str =self.translate(key, self.hull(self.tr(key)[3:]))
@@ -173,34 +166,6 @@ class Keyboard:
                 walls.append("hull(){  "+str+"\n"+str_t+"\n"+str_l+"\n  linear_extrude(0.1)projection(){ hull(){"+str+"\n"+str_t+"\n"+str_l+"}\n  }\n }\n")
         return walls
 
-    # def baseplate(key):
-    #     str =self.translate(key, self.hull(self.tl(key)[3:] + self.tr(key)[3:] + self.bl(key)[3:] + self.br(key)[3:]))
-    #     elems = []
-    #     if 't' in neighbours(key):
-    #         str_t =self.translate(neighbours(key)['t'], self.hull(self.bl(neighbours(key)['t'])[3:] + self.br(neighbours(key)['t'])[3:]))
-    #         elems.append("hull(){\n  "+str+"\n"+str_t+"\n}\n")
-    #     if 'r' in neighbours(key):
-    #         str_r =self.translate(neighbours(key)['r'], self.hull(self.tl(neighbours(key)['r'])[3:] + self.bl(neighbours(key)['r'])[3:]))
-    #         elems.append("hull(){\n  "+str+"\n"+str_r+"\n}\n")
-    #     if 'b' in neighbours(key):
-    #         str_b =self.translate(neighbours(key)['b'], self.hull(self.tl(neighbours(key)['b'])[3:] + self.tr(neighbours(key)['b'])[3:]))
-    #         elems.append("hull(){\n  "+str+"\n"+str_b+"\n}\n")
-    #     if 'l' in neighbours(key):
-    #         str_l =self.translate(neighbours(key)['l'], self.hull(self.tr(neighbours(key)['l'])[3:] + self.br(neighbours(key)['l'])[3:]))
-    #         elems.append("hull(){\n  "+str+"\n"+str_l+"\n}\n")
-        
-    #     diags = []
-    #     if 'tr' in diagonals(key):
-    #         diags.append(translate(diagonals(key)['tr'], self.hull(self.bl(diagonals(key)['tr'])[3:])))
-    #     if 'br' in diagonals(key):
-    #         diags.append(translate(diagonals(key)['br'], self.hull(self.tl(diagonals(key)['br'])[3:])))
-    #     if 'bl' in diagonals(key):
-    #         diags.append(translate(diagonals(key)['bl'], self.hull(self.tr(diagonals(key)['bl'])[3:])))
-    #     if 'tl' in diagonals(key):
-    #         diags.append(translate(diagonals(key)['tl'], self.hull(self.br(diagonals(key)['tl'])[3:])))
-            
-    #     str = "union(){\n  "+str+"\n self.hull(){" + "\n".join(diags) + "\n}\n"+"\n".join(elems)+"\n}\n"
-    #     return "translate([0,0,-8])linear_extrude(3)projection(){"+str+"}\n"
     def intersections(self, key, keys):
         neighs = self.neighbours(key, keys)
         diags = self.diagonals(key, keys)
@@ -304,18 +269,5 @@ class Keyboard:
         
         print("\n".join(str))
         return "\n".join(str)
-    # matrix()
-
-    # def export(self):
-    #     print(self.json.dumps(self.keylist, indent=3))
-    # export()
-
-    # def read_keylist(self, fn="keys.json"):
-    #     with open(fn, 'r') as f:
-    #         data = json.load(f)
-
-    #         matrix(data['self.keylist'])
-
-    # self.read_keylist()
 
 Keyboard()
