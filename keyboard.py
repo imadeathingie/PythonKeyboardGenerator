@@ -10,7 +10,18 @@ class Keyboard:
             self.hole_size = data["hole_size"]
             self.key_1u = data["key_1u"]
             self.thickness = data["thickness"]
-            self.keylist = data["keylist"]
+            keys = data["keylist"]
+            for k in keys:
+                lk = k.get("linked_keys", {})
+                if "r" in lk:
+                    lk["r"] = tuple(lk["r"])
+                if "l" in lk:
+                    lk["l"] = tuple(lk["l"])
+                if "t" in lk:
+                    lk["t"] = tuple(lk["t"])
+                if "b" in lk:
+                    lk["b"] = tuple(lk["b"])
+            self.keylist = keys
             str = self.matrix(self.keylist)
             with open(f"output/scad/{self.name}.scad", 'w') as fw:
                 fw.write(f"mirror([0,0,0]){{\n{str}\n}}")
@@ -77,8 +88,27 @@ class Keyboard:
             pz = z
         return "translate([%s,%s,%s]) {\n  rotate([%s,%s,%s]) {\n%s  }\n}\n" % (px, py, pz, rx, ry, rz, str)
     
+    def get_linked_keys(self, key):
+        linked = []
+        lk = key.get('linked_keys', {})
+        linked.append(lk.get('l')) if lk.get('l') is not None else None
+        linked.append(lk.get('r')) if lk.get('r') is not None else None
+        linked.append(lk.get('t')) if lk.get('t') is not None else None
+        linked.append(lk.get('b')) if lk.get('b') is not None else None
+            # if (key['col'], key['row']) == group.get('l', ()):
+            #     linked.append(group.get('l'))
+            # elif (key['col'], key['row']) == group.get('r', ()):
+            #     linked.append(group.get('r'))
+            # elif (key['col'], key['row']) == group.get('t',()):
+            #     linked.append(group.get('t'))
+            # elif (key['col'], key['row']) == group.get('b',()):
+            #     linked.append(group.get('b'))
+        return linked
     def neighbours(self, key, keys):
         neighbours = {}
+        
+        if(key['col'], key['row']) == (8,0):
+            print("Key: ", (key['col'], key['row']), " Linked: ", self.get_linked_keys(key))
         for k in keys:
             if k['row'] == key['row'] and k['col'] == key['col'] + 1:
                 neighbours['r'] = k
@@ -88,6 +118,26 @@ class Keyboard:
                 neighbours['b'] = k
             elif k['row'] == key['row'] - 1 and k['col'] == key['col']:
                 neighbours['t'] = k
+            elif (k['col'], k['row']) in self.get_linked_keys(key):
+                print("Found linked key for ", (key['col'], key['row']), " -> ", (k['col'], k['row']))
+                if (k['col'], k['row']) == key.get('linked_keys', {}).get('l'):
+                    neighbours['l'] = k
+                elif (k['col'], k['row']) == key.get('linked_keys', {}).get('r'):
+                    neighbours['r'] = k
+                elif (k['col'], k['row']) == key.get('linked_keys', {}).get('t'):
+                    neighbours['t'] = k
+                elif (k['col'], k['row']) == key.get('linked_keys', {}).get('b'):
+                    neighbours['b'] = k
+            # elif [k['col'], k['row']] in linked:
+            #     print("Found linked key for ", (key['col'], key['row']), " -> ", (k['col'], k['row']))
+            #     if (k['col'], k['row']) == key.get('linked_keys', {}).get('l'):
+            #         neighbours['r'] = k
+            #     elif (k['col'], k['row']) == key.get('linked_keys', {}).get('r'):
+            #         neighbours['l'] = k
+            #     elif (k['col'], k['row']) == key.get('linked_keys', {}).get('t'):
+            #         neighbours['b'] = k
+            #     elif (k['col'], k['row']) == key.get('linked_keys', {}).get('b'):
+            #         neighbours['t'] = k
         return neighbours
 
     def diagonals(self, key, keys):
@@ -117,12 +167,14 @@ class Keyboard:
         elif 't' not in neighs:
             str = self.translate(key, self.hull(self.tl(key)[3:] + self.tr(key)[3:]))
             walls.append("hull(){  "+str+"\n  linear_extrude(0.1)projection(){"+str+"}\n  }\n")
-            # if 'r' in neighs:
-            #     str_r = self.translate(neighs['r'], self.hull(self.tl(neighs['r'])[3:]))
-            #     walls.append("hull(){  "+str+"\n"+str_r+"\n  linear_extrude(0.1)projection(){ hull(){"+str+"\n"+str_r+"}\n  }\n }\n")
-            # if 'l' in neighs:
-            #     str_l = self.translate(neighs['l'], self.hull(self.tr(neighs['l'])[3:]))
-            #     walls.append("hull(){  "+str+"\n"+str_l+"\n  linear_extrude(0.1)projection(){ hull(){"+str+"\n"+str_l+"}\n  }\n }\n")
+            if 'r' in neighs:
+                str_r = self.translate(neighs['r'], self.hull(self.tl(neighs['r'])[3:]))
+                str_0 = self.translate(key, self.hull(self.tr(key)[3:5]))
+                walls.append("hull(){  "+str_0+"\n"+str_r+"\n  linear_extrude(0.1)projection(){ hull(){"+str_0+"\n"+str_r+"}\n  }\n }\n")
+            if 'l' in neighs:
+                str_l = self.translate(neighs['l'], self.hull(self.tr(neighs['l'])[3:]))
+                str_0 = self.translate(key, self.hull(self.tl(key)[3:5]))
+                walls.append("hull(){  "+str_0+"\n"+str_l+"\n  linear_extrude(0.1)projection(){ hull(){"+str_0+"\n"+str_l+"}\n  }\n }\n")
         if 'r' in neighs:
             if neighs['r']['pos']['y'] < key['pos']['y'] and 'tr' not in diags:
                 str = "hull(){\n"+self.translate(key, self.hull(self.tr(key)[3:]))+"\n"+self.translate(neighs['r'], self.hull(self.tl(neighs['r'])[3:5]))+"\n}\n"
@@ -302,10 +354,12 @@ class Keyboard:
                 str.append(i)
             for i in self.walls(key, keys):
                 str.append(i)
-            for i in self.base(key, keys, base_thickness=3):
-                str.append(i)
+            # for i in self.base(key, keys, base_thickness=3):
+            #     str.append(i)
+            if(key['col'], key['row']) == (8,0):
+                print("Key: ", (key['col'], key['row']), " Neighbours: ", self.neighbours(key, keys))
         
-        print("\n".join(str))
+        # print("\n".join(str))
         return "\n".join(str)
 
 Keyboard()

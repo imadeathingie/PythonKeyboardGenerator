@@ -100,6 +100,7 @@ class Keylist:
             "u_height": 1,
             "col": x,
             "row": y,
+            "linked_keys": {},
             "pos": {
                 "x": parse_algo(x_algo, x, y, 0),
                 "y": parse_algo(y_algo, x, y, 0),
@@ -114,7 +115,28 @@ class Keylist:
         ]
 
         self.keylist = [k for k in keys if not (k['col'], k['row']) in self.ignored_keys]
-
+        for u in data.get('u_diff', []):
+            for k in self.keylist:
+                if (k['col'], k['row']) in u.get('keys', []):
+                    k['u_width'] = u.get('u_width', 1)
+                    if k['u_width'] != 1:
+                        k['pos']['x'] = parse_algo(x_algo, k['col'] + (k['u_width'] - 1)/2, k['row'], 0)
+                    k['u_height'] = u.get('u_height', 1)
+                    if k['u_height'] != 1:
+                        k['pos']['y'] = parse_algo(y_algo, k['col'], k['row'] + (k['u_height'] - 1)/2, 0)
+        for group in data.get('linked_keys', {}):
+            for k in self.keylist:
+                linked = {}
+                if (k['col'], k['row']) == group.get('l'):
+                    k['linked_keys']['r'] = group.get('r')
+                elif (k['col'], k['row']) == group.get('r'):
+                    k['linked_keys']['l'] = group.get('l')
+                elif (k['col'], k['row']) == group.get('t'):
+                    k['linked_keys']['b'] = group.get('b')
+                elif (k['col'], k['row']) == group.get('b'):
+                    k['linked_keys']['t'] = group.get('t')
+                    
+        
     def export_json(self):
         fn = f"output/keylists/{self.name}_keylist.json"
         with open(fn, 'w') as f:
