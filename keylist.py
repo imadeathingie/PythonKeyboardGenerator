@@ -17,6 +17,12 @@ def parse_algo(expr, x, y, z):
     def _check(node):
         if isinstance(node, ast.Expression):
             return _check(node.body)
+        if isinstance(node, ast.IfExp):
+            # ternary conditional: <body> if <test> else <orelse>
+            _check(node.test)
+            _check(node.body)
+            _check(node.orelse)
+            return
         if isinstance(node, ast.BinOp):
             _check(node.left); _check(node.right)
             if not isinstance(node.op, (ast.Add, ast.Sub, ast.Mult, ast.Div,
@@ -24,9 +30,25 @@ def parse_algo(expr, x, y, z):
                 raise ValueError("Disallowed operator")
             return
         if isinstance(node, ast.UnaryOp):
-            if not isinstance(node.op, (ast.UAdd, ast.USub)):
+            if not isinstance(node.op, (ast.UAdd, ast.USub, ast.Not)):
                 raise ValueError("Disallowed unary operator")
             return _check(node.operand)
+        if isinstance(node, ast.BoolOp):
+            # and/or
+            if not isinstance(node.op, (ast.And, ast.Or)):
+                raise ValueError("Disallowed boolean operator")
+            for v in node.values:
+                _check(v)
+            return
+        if isinstance(node, ast.Compare):
+            # comparisons like x > 5
+            _check(node.left)
+            for comp in node.comparators:
+                _check(comp)
+            for op in node.ops:
+                if not isinstance(op, (ast.Eq, ast.NotEq, ast.Lt, ast.LtE, ast.Gt, ast.GtE)):
+                    raise ValueError("Disallowed comparison operator")
+            return
         if isinstance(node, ast.Call):
             if not isinstance(node.func, ast.Name) or node.func.id not in allowed_funcs:
                 raise ValueError("Disallowed function")
