@@ -120,7 +120,11 @@ class Keylist:
                 if (k['col'], k['row']) in u.get('keys', []):
                     k['u_width'] = u.get('u_width', 1)
                     if k['u_width'] != 1:
-                        k['pos']['x'] = parse_algo(x_algo, k['col'] + (k['u_width'] - 1)/2, k['row'], 0)
+                        if k['u_width'] > 0:
+                            k['pos']['x'] = parse_algo(x_algo, k['col'] + (k['u_width'] - 1)/2, k['row'], 0)
+                        else:
+                            k['u_width'] = abs(k['u_width'])
+                            k['pos']['x'] = parse_algo(x_algo, k['col'] - (k['u_width'] - 1)/2, k['row'], 0)
                     k['u_height'] = u.get('u_height', 1)
                     if k['u_height'] != 1:
                         k['pos']['y'] = parse_algo(y_algo, k['col'], k['row'] + (k['u_height'] - 1)/2, 0)
