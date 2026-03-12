@@ -168,12 +168,12 @@ class Keyboard:
             str = self.translate(key, self.hull(self.tl(key)[3:] + self.tr(key)[3:]))
             walls.append("hull(){  "+str+"\n  linear_extrude(0.1)projection(){"+str+"}\n  }\n")
             if 'r' in neighs:
-                str_r = self.translate(neighs['r'], self.hull(self.tl(neighs['r'])[3:]))
-                str_0 = self.translate(key, self.hull(self.tr(key)[3:5]))
+                str_r = self.translate(neighs['r'], self.hull(self.tl(neighs['r'])[2:]))
+                str_0 = self.translate(key, self.hull(self.tr(key)[2:5]))
                 walls.append("hull(){  "+str_0+"\n"+str_r+"\n  linear_extrude(0.1)projection(){ hull(){"+str_0+"\n"+str_r+"}\n  }\n }\n")
             if 'l' in neighs:
-                str_l = self.translate(neighs['l'], self.hull(self.tr(neighs['l'])[3:]))
-                str_0 = self.translate(key, self.hull(self.tl(key)[3:5]))
+                str_l = self.translate(neighs['l'], self.hull(self.tr(neighs['l'])[2:]))
+                str_0 = self.translate(key, self.hull(self.tl(key)[2:5]))
                 walls.append("hull(){  "+str_0+"\n"+str_l+"\n  linear_extrude(0.1)projection(){ hull(){"+str_0+"\n"+str_l+"}\n  }\n }\n")
         if 'r' in neighs:
             if neighs['r']['pos']['y'] < key['pos']['y'] and 'tr' not in diags:
@@ -182,10 +182,17 @@ class Keyboard:
             if neighs['r']['pos']['y'] > key['pos']['y'] and 'br' not in diags:
                 str = "hull(){"+self.translate(key, self.hull(self.br(key)[3:]))+"\n"+self.translate(neighs['r'], self.hull(self.bl(neighs['r'])[3:5]))+"\n}\n"
                 walls.append("hull(){  "+str+"\n  linear_extrude(0.1)projection(){"+str+"}\n  }\n")
-        if 'r' not in neighs:
+        elif 'r' not in neighs:
             str =self.translate(key, self.hull(self.tr(key)[3:] + self.br(key)[3:]))
             walls.append("hull(){  "+str+"\n  linear_extrude(0.1)projection(){"+str+"}\n  }\n")
-            walls.append("//r")
+            if 't' in neighs:
+                str_t =self.translate(neighs['t'], self.hull(self.br(neighs['t'])[2:]))
+                str_0 = self.translate(key, self.hull(self.tr(key)[2:5]))
+                walls.append("hull(){  "+str_0+"\n"+str_t+"\n  linear_extrude(0.1)projection(){ hull(){"+str_0+"\n"+str_t+"}\n  }\n }\n")
+            if 'b' in neighs:
+                str_b =self.translate(neighs['b'], self.hull(self.tr(neighs['b'])[2:]))
+                str_0 = self.translate(key, self.hull(self.br(key)[2:5]))
+                walls.append("hull(){  "+str_0+"\n"+str_b+"\n  linear_extrude(0.1)projection(){ hull(){"+str_0+"\n"+str_b+"}\n  }\n }\n")
             # if 't' in neighs:
             #     str_t =self.translate(neighs['t'], self.hull(self.br(neighs['t'])[3:]))
             #     walls.append("hull(){  "+str+"\n"+str_t+"\n  linear_extrude(0.1)projection(){ hull(){"+str+"\n"+str_t+"}\n  }\n }\n")
@@ -203,12 +210,12 @@ class Keyboard:
             str =self.translate(key, self.hull(self.bl(key)[3:] + self.br(key)[3:]))
             walls.append("hull(){  "+str+"\n  linear_extrude(0.1)projection(){"+str+"}\n  }\n")
             if 'r' in neighs:
-                str_r = self.translate(neighs['r'], self.hull(self.bl(neighs['r'])[3:]))
-                str_0 = self.translate(key, self.hull(self.br(key)[3:5]))
+                str_r = self.translate(neighs['r'], self.hull(self.bl(neighs['r'])[2:]))
+                str_0 = self.translate(key, self.hull(self.br(key)[2:5]))
                 walls.append("hull(){  "+str_0+"\n"+str_r+"\n  linear_extrude(0.1)projection(){ hull(){"+str_0+"\n"+str_r+"}\n  }\n }\n")
             if 'l' in neighs:
-                str_l = self.translate(neighs['l'], self.hull(self.br(neighs['l'])[3:]))
-                str_0 = self.translate(key, self.hull(self.bl(key)[3:5]))
+                str_l = self.translate(neighs['l'], self.hull(self.br(neighs['l'])[2:]))
+                str_0 = self.translate(key, self.hull(self.bl(key)[2:5]))
                 walls.append("hull(){  "+str_0+"\n"+str_l+"\n  linear_extrude(0.1)projection(){ hull(){"+str_0+"\n"+str_l+"}\n  }\n }\n")
         
         if 'l' in neighs:
@@ -221,6 +228,14 @@ class Keyboard:
         elif 'l' not in neighs:
             str =self.translate(key, self.hull(self.bl(key)[3:] + self.tl(key)[3:]))
             walls.append("hull(){  "+str+"\n  linear_extrude(0.1)projection(){"+str+"}\n  }\n")
+            if 't' in neighs:
+                str_t =self.translate(neighs['t'], self.hull(self.bl(neighs['t'])[2:]))
+                str_0 = self.translate(key, self.hull(self.tl(key)[2:5]))
+                walls.append("hull(){  "+str_0+"\n"+str_t+"\n  linear_extrude(0.1)projection(){ hull(){"+str_0+"\n"+str_t+"}\n  }\n }\n")
+            if 'b' in neighs:
+                str_b =self.translate(neighs['b'], self.hull(self.tl(neighs['b'])[2:]))
+                str_0 = self.translate(key, self.hull(self.bl(key)[2:5]))
+                walls.append("hull(){  "+str_0+"\n"+str_b+"\n  linear_extrude(0.1)projection(){ hull(){"+str_0+"\n"+str_b+"}\n  }\n }\n")
             # if 't' in neighs:
             #     str_t =self.translate(neighs['t'], self.hull(self.bl(neighs['t'])[3:]))
             #     walls.append("hull(){  "+str+"\n"+str_t+"\n  linear_extrude(0.1)projection(){ hull(){"+str+"\n"+str_t+"}\n  }\n }\n")

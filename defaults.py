@@ -133,5 +133,33 @@ data = [
         "x_rot_algo": "0",
         "y_rot_algo": "0",
         "z_rot_algo": "0"
+    },
+    {
+        "name": "y_gappy_5x5",
+        "width": 5,
+        "height": 5,
+        "hole_size": 14.5,
+        "key_1u": 19.05,
+        "thickness": 5,
+        "x_algo": "x*19.05",
+        "y_algo": "-y*20.05",
+        "z_algo": "10",
+        "x_rot_algo": "-y*5",
+        "y_rot_algo": "0",
+        "z_rot_algo": "0"
+    },
+    {
+        "name": "x_gappy_5x5",
+        "width": 5,
+        "height": 5,
+        "hole_size": 14.5,
+        "key_1u": 19.05,
+        "thickness": 5,
+        "x_algo": "x*22.05",
+        "y_algo": "-y*19.05",
+        "z_algo": "10",
+        "x_rot_algo": "0",
+        "y_rot_algo": "(x-3)*-10",
+        "z_rot_algo": "0"
     }
 ]
