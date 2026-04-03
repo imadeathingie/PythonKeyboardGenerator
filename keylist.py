@@ -111,7 +111,10 @@ class Keylist:
                 "y": parse_algo(y_rot_algo, x, y, 0),
                 "z": parse_algo(z_rot_algo, x, y, 0)
             },
-            "insert": {}
+            "insert": {},
+            "legend":"",
+            "switch_profile": "dsa",
+            "switch_rotation": 0
         } for x in range(width) for y in range(height)
         ]
 
@@ -146,6 +149,15 @@ class Keylist:
                     k['insert']['x'] = inserts.get('x')
                     k['insert']['y'] = inserts.get('y')
                     k['insert']['rot'] = inserts.get('rot')
+        for legends in data.get('legends', []):
+            for k in self.keylist:
+                if k['col'] == legends.get('col') and k['row'] == legends.get('row'):
+                    k['legend'] = legends.get('legend')
+        for switches in data.get('switches', []):
+            for k in self.keylist:
+                if k['col'] == switches.get('col') and k['row'] == switches.get('row'):
+                    k['switch_profile'] = switches.get('profile', 'dsa')
+                    k['switch_rotation'] = switches.get('rot', 0)
                     
         
     def export_json(self, data):

@@ -381,7 +381,7 @@ class Keyboard:
         for i in intersections:
             str.append(f"hull(){{translate([0,0,-5-{base_thickness}])linear_extrude({base_thickness})projection(){{\n  {i}\n  }}}}")
         return str
-    def keyswitches(self, key, switch={'profile': 'dsa'}):
+    def keyswitches(self, key):
         str = []
         px = key['pos']['x']
         py = key['pos']['y']
@@ -390,7 +390,7 @@ class Keyboard:
         ry = key['rotation']['y']
         rz = key['rotation']['z']
         str.append("translate([%s,%s,%s]) {\n  rotate([%s,%s,%s]) {\n" % (px, py, pz, rx, ry, rz))
-        str.append("KeySwitch(profile=\"%s\");\n" % (switch['profile']))
+        str.append("rotate([0,0,%s])KeySwitch(profile=\"%s\", legend=\"%s\");\n" % (key['switch_rotation'], key['switch_profile'], key['legend']))
         str.append("  }\n}\n")
         return "\n".join(str)
     def keyhole(self, key, switch={'profile': 'dsa'}):

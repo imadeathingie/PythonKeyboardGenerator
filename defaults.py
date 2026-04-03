@@ -269,6 +269,85 @@ data = [
                 "y": -7,
                 "rot": 180
             }
+        ],
+        "switch_rotation": 180,
+        "switch_profile": "dsa",
+        "legends": [
+            {
+                "col": 0,
+                "row": 0,
+                "legend": "A"
+            },
+            {
+                "col": 1,
+                "row": 0,
+                "legend": "Bb"
+            },
+            {
+                "col": 2,
+                "row": 0,
+                "legend": "B"
+            },
+            {
+                "col": 3,
+                "row": 0,
+                "legend": "C"
+            },
+            {
+                "col": 4,
+                "row": 0,
+                "legend": "C#"
+            },
+            {
+                "col": 0,
+                "row": 1,
+                "legend": "D"
+            },
+            {
+                "col": 1,
+                "row": 1,
+                "legend": "D#"
+            },
+            {
+                "col": 2,
+                "row": 1,
+                "legend": "E"
+            },
+            {
+                "col": 3,
+                "row": 1,
+                "legend": "F"
+            },
+            {
+                "col": 4,
+                "row": 1,
+                "legend": "F#"
+            },
+            {
+                "col": 0,
+                "row": 2,
+                "legend": "G"
+            },
+            {
+                "col": 1,
+                "row": 2,
+                "legend": "G#"
+            },
+            {
+                "col": 2,
+                "row": 2,
+                "legend": "A"
+            },
+            {
+                "col": 3,
+                "row": 2,
+                "legend": "Bb"
+            },
+            {
+                "col": 4,
+                "row": 2,
+                "legend": "B"
+            }
         ]
     },
     {
