@@ -231,7 +231,7 @@ data = [
         'name': "5x3_staggered_pinky",
         "width": 5,
         "height": 3,
-        "hole_size": 14.5,
+        "hole_size": 15,
         "key_1u": 19.05,
         "thickness": 5,
         "x_algo": "x*1905/100 + x",
@@ -276,77 +276,77 @@ data = [
             {
                 "col": 0,
                 "row": 0,
-                "legend": "A"
-            },
-            {
-                "col": 1,
-                "row": 0,
-                "legend": "Bb"
-            },
-            {
-                "col": 2,
-                "row": 0,
-                "legend": "B"
-            },
-            {
-                "col": 3,
-                "row": 0,
-                "legend": "C"
-            },
-            {
-                "col": 4,
-                "row": 0,
-                "legend": "C#"
-            },
-            {
-                "col": 0,
-                "row": 1,
                 "legend": "D"
             },
             {
                 "col": 1,
-                "row": 1,
-                "legend": "D#"
+                "row": 0,
+                "legend": "Eb"
             },
             {
                 "col": 2,
-                "row": 1,
+                "row": 0,
                 "legend": "E"
             },
             {
                 "col": 3,
-                "row": 1,
+                "row": 0,
                 "legend": "F"
             },
             {
                 "col": 4,
-                "row": 1,
+                "row": 0,
                 "legend": "F#"
             },
             {
                 "col": 0,
+                "row": 1,
+                "legend": "A"
+            },
+            {
+                "col": 1,
+                "row": 1,
+                "legend": "Bb"
+            },
+            {
+                "col": 2,
+                "row": 1,
+                "legend": "B"
+            },
+            {
+                "col": 3,
+                "row": 1,
+                "legend": "C"
+            },
+            {
+                "col": 4,
+                "row": 1,
+                "legend": "C#"
+            },
+            {
+                "col": 0,
                 "row": 2,
-                "legend": "G"
+                "legend": "E"
             },
             {
                 "col": 1,
                 "row": 2,
-                "legend": "G#"
+                "legend": "F"
             },
             {
                 "col": 2,
                 "row": 2,
-                "legend": "A"
+                "legend": "F#"
             },
             {
                 "col": 3,
                 "row": 2,
-                "legend": "Bb"
+                "legend": "G"
             },
             {
                 "col": 4,
                 "row": 2,
-                "legend": "B"
+                "legend": "G#"
             }
         ]
     },
