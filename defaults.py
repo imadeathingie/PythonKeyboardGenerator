@@ -2,16 +2,7 @@ data = [
     {
         'name': "5x5",
         "width": 5,
-        "height": 5,
-        # "hole_size": 14.5,
-        # "key_1u": 19.05,
-        # "thickness": 5,
-        # "x_algo": "x*1905/100+(x*10)",
-        # "y_algo": "-y*1905/100-(y*10)",
-        # "z_algo": "abs(y-2)*4+abs(x-2)*3 + 10",
-        # "x_rot_algo": "(y-2)*-5",
-        # "y_rot_algo": "(x - 2)*(-9)",
-        # "z_rot_algo": "0"
+        "height": 5
     },
     {
         'name': "5x5_2",
@@ -160,6 +151,175 @@ data = [
         "z_algo": "10",
         "x_rot_algo": "0",
         "y_rot_algo": "(x-3)*-10",
-        "z_rot_algo": "0"
+        "z_rot_algo": "0",
+        "inserts": [
+            {
+                "col": 0,
+                "row": 0,
+                "x": -5,
+                "y": 6,
+                "rot": 0
+            },
+            {
+                "col": 4,
+                "row": 0,
+                "x": 5,
+                "y": 6,
+                "rot": 0
+            },
+            {
+                "col": 4,
+                "row": 4,
+                "x": 5,
+                "y": -6,
+                "rot": 180
+            },
+            {
+                "col": 0,
+                "row": 4,
+                "x": -5,
+                "y": -6,
+                "rot": 180
+            }
+        ]
+    },
+    {
+        'name': "5x3",
+        "width": 5,
+        "height": 3,
+        "hole_size": 14.5,
+        "key_1u": 19.05,
+        "thickness": 5,
+        "x_algo": "x*1905/100",
+        "y_algo": "-y*1905/100",
+        "z_algo": "abs(y-1)*4+10",
+        "x_rot_algo": "(y-1)*-5",
+        "y_rot_algo": "0",
+        "z_rot_algo": "0",
+        "inserts": [
+            {
+                "col": 0,
+                "row": 0,
+                "x": -5,
+                "y": 6,
+                "rot": 0
+            },
+            {
+                "col": 4,
+                "row": 0,
+                "x": 5,
+                "y": 6,
+                "rot": 0
+            },
+            {
+                "col": 4,
+                "row": 2,
+                "x": 5,
+                "y": -6,
+                "rot": 180
+            },
+            {
+                "col": 0,
+                "row": 2,
+                "x": -5,
+                "y": -6,
+                "rot": 180
+            }
+        ]
+    },
+    {
+        'name': "5x3_staggered_pinky",
+        "width": 5,
+        "height": 3,
+        "hole_size": 14.5,
+        "key_1u": 19.05,
+        "thickness": 5,
+        "x_algo": "x*1905/100 + x*3",
+        "y_algo": "-y*1905/100 + (5 if x == 4 else 0)",
+        "z_algo": "y*(y+1)+13- x + (1 if x == 4 else 0)",
+        "x_rot_algo": "y*-8",
+        "y_rot_algo": "x*-5",
+        "z_rot_algo": "0",
+        "inserts": [
+            {
+                "col": 0,
+                "row": 0,
+                "x": -6,
+                "y": 6,
+                "rot": 0
+            },
+            {
+                "col": 4,
+                "row": 0,
+                "x": 6,
+                "y": 6,
+                "rot": 0
+            },
+            {
+                "col": 4,
+                "row": 2,
+                "x": 6,
+                "y": -7,
+                "rot": 180
+            },
+            {
+                "col": 0,
+                "row": 2,
+                "x": -6,
+                "y": -7,
+                "rot": 180
+            }
+        ]
+    },
+    {
+        'name': "5x3_staggered",
+        "width": 5,
+        "height": 3,
+        "hole_size": 14.5,
+        "key_1u": 19.05,
+        "thickness": 5,
+        "x_algo": "x*1905/100 - x*10",
+        "y_algo": "-y*1905/100 if x != 4 else -y*1905/100 + 5",
+        "z_algo": "y*(y+1)+13+x*15",
+        "x_rot_algo": "y*-5",
+        "y_rot_algo": "(x-5)*-12",
+        "z_rot_algo": "0",
+        "inserts": [
+            {
+                "col": 0,
+                "row": 0,
+                "x": -5,
+                "y": 6,
+                "rot": 0
+            },
+            {
+                "col": 0,
+                "row": 0,
+                "x": -5,
+                "y": 6,
+                "rot": 90
+            },
+            {
+                "col": 4,
+                "row": 0,
+                "x": 5,
+                "y": 6,
+                "rot": 0
+            },
+            {
+                "col": 4,
+                "row": 2,
+                "x": 5,
+                "y": -6,
+                "rot": 180
+            },
+            {
+                "col": 0,
+                "row": 2,
+                "x": -5,
+                "y": -6,
+                "rot": 180
+            }
+        ]
     }
 ]

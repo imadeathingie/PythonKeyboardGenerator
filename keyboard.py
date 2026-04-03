@@ -4,6 +4,7 @@ class Keyboard:
 
     def __init__(self, fn=sys.argv[1] if len(sys.argv) > 1 else "default_keylist.json"):
         with open(f"output/keylists/{fn}", 'r') as fr:
+            includes = "include <../../../../lib/KeySwitch/keyswitch.scad>\n"
             data = self.json.load(fr)
             self.eps = 0.001
             self.name = data["name"] if data.get("name") is not None else "default"
@@ -22,10 +23,43 @@ class Keyboard:
                 if "b" in lk:
                     lk["b"] = tuple(lk["b"])
             self.keylist = keys
-            str = self.matrix(self.keylist)
-            with open(f"output/scad/{self.name}.scad", 'w') as fw:
-                fw.write(f"mirror([0,0,0]){{\n{str}\n}}")
-
+            scads = self.matrix(self.keylist) # [fn, keys, baseplate, keyswitches]
+            with open(f"output/scad/{self.name}_full.scad", 'w') as fw:
+                fw.write(includes + "\n".join(scads))
+            with open(f"output/scad/{self.name}_keys.scad", 'w') as fw:
+                fw.write(scads[0] + "\n" + scads[1])
+            with open(f"output/scad/{self.name}_base.scad", 'w') as fw:
+                fw.write(scads[0] + "\n" + scads[2])
+    
+    def inserts(self, key):
+        x = key['insert']['x']
+        y = key['insert']['y']
+        u = key['u_width']
+        h = key['u_height']
+        x_pos = x * u
+        y_pos = y * h
+        str = """
+                intersection(){
+                translate([0,-0.5,4])cube([5,5,8], true);
+                difference(){
+                translate([0,0,2])hull(){
+                translate([0,0,1])sphere(2.5);
+                translate([0,2,0.75])cube([5,0.1,5.5], true);
+                cylinder(h=4,r=2.5,center=true);
+                }
+                cylinder(h=4.1,r=1.5,center=true);
+                }
+                }
+                """
+        str_r = f"rotate([0,0,{key['insert']['rot']}]) {{ \n {str} \n }}"
+        str_0 = f"translate([{x_pos}, {y_pos}, 0]){{ {str_r} }}"
+        
+        return { 
+            "scad": "translate([%s,%s,0]) {\n%s  }\n" % (key['pos']['x'], key['pos']['y'], str_0),
+            "x": x_pos + key['pos']['x'],
+            "y": y_pos + key['pos']['y']
+        }
+        
     def tl(self, k):
         u = k['u_width']
         h = k['u_height']
@@ -347,8 +381,19 @@ class Keyboard:
         for i in intersections:
             str.append(f"hull(){{translate([0,0,-5-{base_thickness}])linear_extrude({base_thickness})projection(){{\n  {i}\n  }}}}")
         return str
-    
-    def keyhole(self, key):
+    def keyswitches(self, key, switch={'profile': 'dsa'}):
+        str = []
+        px = key['pos']['x']
+        py = key['pos']['y']
+        pz = key['pos']['z']
+        rx = key['rotation']['x']
+        ry = key['rotation']['y']
+        rz = key['rotation']['z']
+        str.append("translate([%s,%s,%s]) {\n  rotate([%s,%s,%s]) {\n" % (px, py, pz, rx, ry, rz))
+        str.append("KeySwitch(profile=\"%s\");\n" % (switch['profile']))
+        str.append("  }\n}\n")
+        return "\n".join(str)
+    def keyhole(self, key, switch={'profile': 'dsa'}):
         str = []
         px = key['pos']['x']
         py = key['pos']['y']
@@ -365,19 +410,32 @@ class Keyboard:
         return "\n".join(str)
 
     def matrix(self, keys):
+        fn = "$fn=60;"
         str = []
+        inserts = []
+        base = []
+        keyswitches = []
+        baseplate_thickness = 3
         for key in keys:
             str.append(self.keyhole(key))
+            keyswitches.append(self.keyswitches(key))
             for i in self.intersections(key, keys):
                 str.append(i)
             for i in self.walls(key, keys):
                 str.append(i)
-            # for i in self.base(key, keys, base_thickness=3):
-            #     str.append(i)
+            if key.get('insert').get('x') is not None and key.get('insert').get('y') is not None:
+                res = self.inserts(key)
+                str.append(res['scad'])
+                inserts.append(f"translate([{res['x']},{res['y']},{baseplate_thickness/2}]) cylinder(h={baseplate_thickness*50}, r=1.5, center=true);")
+            for i in self.base(key, keys, base_thickness=baseplate_thickness):
+                base.append(i)
             if(key['col'], key['row']) == (8,0):
                 print("Key: ", (key['col'], key['row']), " Neighbours: ", self.neighbours(key, keys))
         
-        # print("\n".join(str))
-        return "\n".join(str)
+        base_str = '\n'.join(base)
+        insert_str = '\n'.join(inserts)
+        baseplate = f"module base(){{\n {base_str} \n}}\n\nmodule inserts(){{\n{insert_str}\n}}\n\n\ndifference(){{\n base(); \n inserts(); \n}}\n"
+        caps = "\n".join(keyswitches)
+        return [fn, "\n".join(str), baseplate, caps]
 
 Keyboard()

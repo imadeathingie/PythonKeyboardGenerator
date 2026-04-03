@@ -73,7 +73,7 @@ def parse_algo(expr, x, y, z):
 class Keylist:                                         
     def __init__(self, data):
         self.gen_matrix(data)
-        self.export_json()
+        self.export_json(data)
         print(self.name)
 
 
@@ -110,7 +110,8 @@ class Keylist:
                 "x": parse_algo(x_rot_algo, x, y, 0),
                 "y": parse_algo(y_rot_algo, x, y, 0),
                 "z": parse_algo(z_rot_algo, x, y, 0)
-            }
+            },
+            "insert": {}
         } for x in range(width) for y in range(height)
         ]
 
@@ -139,9 +140,15 @@ class Keylist:
                     k['linked_keys']['b'] = group.get('b')
                 elif (k['col'], k['row']) == group.get('b'):
                     k['linked_keys']['t'] = group.get('t')
+        for inserts in data.get('inserts', []):
+            for k in self.keylist:
+                if k['col'] == inserts.get('col') and k['row'] == inserts.get('row'):
+                    k['insert']['x'] = inserts.get('x')
+                    k['insert']['y'] = inserts.get('y')
+                    k['insert']['rot'] = inserts.get('rot')
                     
         
-    def export_json(self):
+    def export_json(self, data):
         fn = f"output/keylists/{self.name}_keylist.json"
         with open(fn, 'w') as f:
             json.dump(
@@ -152,6 +159,10 @@ class Keylist:
                     "thickness":self.thickness, 
                     "keylist":self.keylist
                 }, f, indent=4)
+        fn = f"output/data/{self.name}.json"
+        with open(fn, 'w') as f:
+            json.dump(data, f, indent=4)
+
     
 arg = sys.argv[1] if len(sys.argv) > 1 else 0
 if len(defaults.data) > int(arg):
