@@ -72,3 +72,4 @@ module KeySwitch(profile="dsa", legend="Q", size=7) {
     CherryMX();
     keycap(profile=profile, legend=legend, size=size);
 }
+

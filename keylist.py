@@ -149,6 +149,8 @@ class Keylist:
                     k['insert']['x'] = inserts.get('x')
                     k['insert']['y'] = inserts.get('y')
                     k['insert']['rot'] = inserts.get('rot')
+                    k['insert']['start_angle'] = inserts.get('start_angle')
+                    k['insert']['end_angle'] = inserts.get('end_angle')
         for legends in data.get('legends', []):
             for k in self.keylist:
                 if k['col'] == legends.get('col') and k['row'] == legends.get('row'):

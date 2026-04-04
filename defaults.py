@@ -231,7 +231,7 @@ data = [
         'name': "5x3_staggered_pinky",
         "width": 5,
         "height": 3,
-        "hole_size": 15,
+        "hole_size": 15.25,
         "key_1u": 19.05,
         "thickness": 5,
         "x_algo": "x*1905/100 + x",
@@ -244,30 +244,38 @@ data = [
             {
                 "col": 0,
                 "row": 0,
-                "x": -6,
-                "y": 6,
-                "rot": 0
+                "x": -4,
+                "y": 4,
+                "rot": 0,
+                "start_angle": 0,
+                "end_angle": 90
             },
             {
                 "col": 4,
                 "row": 0,
-                "x": 6,
-                "y": 6,
-                "rot": 0
+                "x": 4,
+                "y": 4,
+                "rot": 0,
+                "start_angle": 270,
+                "end_angle": 360
             },
             {
                 "col": 4,
                 "row": 2,
-                "x": 6,
-                "y": -7,
-                "rot": 180
+                "x": 4,
+                "y": -4,
+                "rot": 0,
+                "start_angle": 180,
+                "end_angle": 270
             },
             {
                 "col": 0,
                 "row": 2,
-                "x": -6,
-                "y": -7,
-                "rot": 180
+                "x": -4,
+                "y": -4,
+                "rot": 0,
+                "start_angle": 90,
+                "end_angle": 180
             }
         ],
         "switch_rotation": 180,

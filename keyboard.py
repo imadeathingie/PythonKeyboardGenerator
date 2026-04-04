@@ -32,6 +32,14 @@ class Keyboard:
                 fw.write(scads[0] + "\n" + scads[2])
     
     def inserts(self, key):
+        start_angle=key['insert'].get('start_angle', 0)
+        end_angle=key['insert'].get('end_angle', 90)
+        id=key['insert'].get('id', 4)
+        od=key['insert'].get('od', 8)
+        depth=key['insert'].get('depth', 10)
+        height=key['insert'].get('height', 4.2)
+        insert_modules = [f"difference(){{\nhull(){{\ntranslate([0,0,{height}/2])cylinder(r={od}/2, h={height}, center=true);\nfor(i=[{start_angle}: 5: {end_angle}]){{\nrotate([0,0,i])translate([0,{od}/4,{height}/2])cube([0.01,od/2, {height}], center=true);}}\nrotate([0,0,{start_angle}])translate([0,{depth}/2,{height}/2])cube([{depth},0.1,{height}], center=true);\nrotate([0,0,{end_angle}])translate([0,{depth}/2,{height}/2])cube([{depth},0.1,{height}], center=true);\n}}\ntranslate([0,0,-0.05])linear_extrude({height}+0.1)circle(d={id});\n}}\n\n",
+            "cylinder(h=4.2,r=1.6,center=true);"]
         x = key['insert']['x']
         y = key['insert']['y']
         u = key['u_width']
@@ -51,7 +59,7 @@ class Keyboard:
                 }
                 }
                 """
-        str_r = f"rotate([0,0,{key['insert']['rot']}]) {{ \n {str} \n }}"
+        str_r = f"rotate([0,0,{key['insert']['rot']}]) {{ \n {insert_modules[0]} \n }}"
         str_0 = f"translate([{x_pos}, {y_pos}, 0]){{ {str_r} }}"
         
         return { 
